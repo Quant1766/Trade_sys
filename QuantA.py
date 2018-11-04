@@ -784,8 +784,7 @@ class ExmoAPI(object):
         resp = self.api_query('deposit_address')
         return resp
 
-class Algoritms(object):
-
+class TechAnalyseAlgo(object):
 
     def ExpMovingAverage(self,values, window=5,mode='full'):
         weights = np.exp(np.linspace(-1., 0., window))
@@ -795,21 +794,21 @@ class Algoritms(object):
         a[:window] = a[window]
         return a
     
-    def movingaverage(values, window):
+    def movingaverage(self,values, window):
     weigths = np.repeat(1.0, window) / window
     smas = np.convolve(values, weigths, 'valid')
     return smas
 
-    def AU_AD(self,data_stock):
+    def AU_AD(self,values):
 
-        data_stock = np.array(data_stock)
+        values = np.array(values)
         AU = []
         AD = []
         AU_ = []
         AD_ = []
-        for t, price in enumerate(data_stock):
+        for t, price in enumerate(values):
             if t > 1:
-                res = price - data_stock[t - 1]
+                res = price - values[t - 1]
                 if res > 0:
                     AU.append(res)
                     AU_.append(price)
@@ -825,16 +824,16 @@ class Algoritms(object):
         AU = np.array(AU)
         return AU, AD
 
-    def rsiFunc(prices, n=14):
-    deltas = np.diff(prices)
+    def rsiFunc(self,values, n=14):
+    deltas = np.diff(values)
     seed = deltas[:n + 1]
     up = seed[seed >= 0].sum() / n
     down = -seed[seed < 0].sum() / n
     rs = up / down
-    rsi = np.zeros_like(prices)
+    rsi = np.zeros_like(values)
     rsi[:n] = 100. - 100. / (1. + rs)
 
-    for i in range(n, len(prices)):
+    for i in range(n, len(values)):
         delta = deltas[i - 1]  # cause the diff is 1 shorter
 
         if delta > 0:
